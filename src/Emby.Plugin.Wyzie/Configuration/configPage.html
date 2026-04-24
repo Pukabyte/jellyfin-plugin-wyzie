@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wyzie Subtitles</title>
+</head>
+<body>
+<div id="WyzieConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-select,emby-checkbox">
+  <div data-role="content">
+    <div class="content-primary">
+      <form id="WyzieConfigForm">
+        <div class="sectionTitleContainer">
+          <h2 class="sectionTitle">Wyzie Subtitles</h2>
+          <p>On-demand subtitles from <a href="https://sub.wyzie.io" target="_blank" rel="noopener">sub.wyzie.io</a>. Claim a free API key at <a href="https://sub.wyzie.io/redeem" target="_blank" rel="noopener">sub.wyzie.io/redeem</a>.</p>
+        </div>
+
+        <div class="inputContainer">
+          <label class="inputLabel inputLabelUnfocused" for="ApiKey">API key</label>
+          <input is="emby-input" type="text" id="ApiKey" autocomplete="off" spellcheck="false" />
+        </div>
+
+        <div class="checkboxContainer">
+          <label>
+            <input is="emby-checkbox" type="checkbox" id="IncludeHearingImpaired" />
+            <span>Include hearing-impaired (SDH) subtitles</span>
+          </label>
+        </div>
+
+        <div class="selectContainer">
+          <label class="selectLabel" for="PreferredSource">Preferred source</label>
+          <select is="emby-select" id="PreferredSource">
+            <option value="all">All sources</option>
+            <option value="subdl">subdl</option>
+            <option value="subf2m">subf2m</option>
+            <option value="opensubtitles">opensubtitles</option>
+            <option value="podnapisi">podnapisi</option>
+            <option value="animetosho">animetosho</option>
+            <option value="jimaku">jimaku</option>
+            <option value="kitsunekko">kitsunekko</option>
+            <option value="gestdown">gestdown</option>
+            <option value="yify">yify</option>
+            <option value="ajatttools">ajatttools</option>
+          </select>
+        </div>
+
+        <div class="selectContainer">
+          <label class="selectLabel" for="PreferredFormat">Preferred format</label>
+          <select is="emby-select" id="PreferredFormat">
+            <option value="srt">SRT</option>
+            <option value="ass">ASS</option>
+            <option value="sub">SUB</option>
+          </select>
+        </div>
+
+        <div class="inputContainer">
+          <label class="inputLabel inputLabelUnfocused" for="MaxRetries">Max retries on transient errors</label>
+          <input is="emby-input" type="number" id="MaxRetries" min="0" max="10" step="1" />
+        </div>
+
+        <div>
+          <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+            <span>Save</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    (function () {
+      var pluginId = 'c3d9f7a0-2d4e-4b8f-9a1c-7e3d4c5a6b71';
+
+      function loadConfig(page) {
+        Dashboard.showLoadingMsg();
+        ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+          page.querySelector('#ApiKey').value = config.ApiKey || '';
+          page.querySelector('#IncludeHearingImpaired').checked = !!config.IncludeHearingImpaired;
+          page.querySelector('#PreferredSource').value = config.PreferredSource || 'all';
+          page.querySelector('#PreferredFormat').value = config.PreferredFormat || 'srt';
+          page.querySelector('#MaxRetries').value = config.MaxRetries != null ? config.MaxRetries : 3;
+          Dashboard.hideLoadingMsg();
+        });
+      }
+
+      document.querySelector('#WyzieConfigPage').addEventListener('pageshow', function () {
+        loadConfig(this);
+      });
+
+      document.querySelector('#WyzieConfigForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        Dashboard.showLoadingMsg();
+        var page = document.querySelector('#WyzieConfigPage');
+        ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+          config.ApiKey = page.querySelector('#ApiKey').value.trim();
+          config.IncludeHearingImpaired = page.querySelector('#IncludeHearingImpaired').checked;
+          config.PreferredSource = page.querySelector('#PreferredSource').value;
+          config.PreferredFormat = page.querySelector('#PreferredFormat').value;
+          config.MaxRetries = parseInt(page.querySelector('#MaxRetries').value, 10) || 0;
+          ApiClient.updatePluginConfiguration(pluginId, config).then(Dashboard.processPluginConfigurationUpdateResult);
+        });
+        return false;
+      });
+    })();
+  </script>
+</div>
+</body>
+</html>

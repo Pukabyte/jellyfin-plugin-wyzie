@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"curl -s --max-time 15 'https://sub.wyzie.ru/search?id=tt3659388&language=en&format=srt' | python3 -c \\\"\\nimport json,sys\\nd=json.load(sys.stdin)\\nprint('type:', type(d).__name__, 'count:',...",
+  "error": "Exit code 1\nTraceback (most recent call last):\n  File \"<string>\", line 3, in <module>\n  File \"/usr/lib/python3.12/json/__init__.py\", line 293, in load\n    return loads(fp.read(),\n           ^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^...",
+  "timestamp": "2026-04-24T21:08:44.007Z",
+  "retry_count": 2
+}

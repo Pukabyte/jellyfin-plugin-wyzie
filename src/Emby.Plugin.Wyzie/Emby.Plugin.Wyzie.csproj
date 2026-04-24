@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Emby.Plugin.Wyzie</AssemblyName>
+    <RootNamespace>Emby.Plugin.Wyzie</RootNamespace>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <DefineConstants>$(DefineConstants);EMBY</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="mediabrowser.server.core" Version="4.8.*-*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wyzie.Common\Wyzie.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\configPage.html" />
+  </ItemGroup>
+</Project>

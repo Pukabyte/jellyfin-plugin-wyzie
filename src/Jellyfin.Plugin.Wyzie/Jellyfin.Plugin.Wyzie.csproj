@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Jellyfin.Plugin.Wyzie</AssemblyName>
+    <RootNamespace>Jellyfin.Plugin.Wyzie</RootNamespace>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jellyfin.Controller" Version="10.9.11" />
+    <PackageReference Include="Jellyfin.Model" Version="10.9.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wyzie.Common\Wyzie.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\configPage.html" />
+  </ItemGroup>
+</Project>
