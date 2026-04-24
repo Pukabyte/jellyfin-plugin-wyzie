@@ -5,3 +5,5 @@ obj/
 .idea/
 *.suo
 artifacts/
+.omc/
+.claude/
