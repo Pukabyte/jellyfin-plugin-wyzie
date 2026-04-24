@@ -1,6 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <!--
+      Build a specific Jellyfin target with:
+          dotnet build -p:JellyfinVersion=10.9   (default)
+          dotnet build -p:JellyfinVersion=10.10
+          dotnet build -p:JellyfinVersion=10.11
+      Output lands under bin/Release/<tfm>/ — the package script copies
+      per-version binaries into artifacts/.
+    -->
+    <JellyfinVersion Condition="'$(JellyfinVersion)' == ''">10.9</JellyfinVersion>
+
+    <TargetFramework Condition="'$(JellyfinVersion)' == '10.11'">net9.0</TargetFramework>
+    <TargetFramework Condition="'$(JellyfinVersion)' != '10.11'">net8.0</TargetFramework>
+
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <AssemblyName>Jellyfin.Plugin.Wyzie</AssemblyName>
@@ -8,9 +20,19 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(JellyfinVersion)' == '10.9'">
     <PackageReference Include="Jellyfin.Controller" Version="10.9.11" />
     <PackageReference Include="Jellyfin.Model" Version="10.9.11" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(JellyfinVersion)' == '10.10'">
+    <PackageReference Include="Jellyfin.Controller" Version="10.10.7" />
+    <PackageReference Include="Jellyfin.Model" Version="10.10.7" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(JellyfinVersion)' == '10.11'">
+    <PackageReference Include="Jellyfin.Controller" Version="10.11.5" />
+    <PackageReference Include="Jellyfin.Model" Version="10.11.5" />
   </ItemGroup>
 
   <ItemGroup>
