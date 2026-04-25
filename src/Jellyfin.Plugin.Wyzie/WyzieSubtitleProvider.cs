@@ -87,18 +87,26 @@ public class WyzieSubtitleProvider : ISubtitleProvider
 
     private static RemoteSubtitleInfo ToRemoteInfo(WyzieSubtitle s)
     {
-        var display = string.IsNullOrWhiteSpace(s.Display) ? (s.FileName ?? s.Url) : s.Display;
-        if (s.IsHearingImpaired) display += " (SDH)";
         return new RemoteSubtitleInfo
         {
             Id = WyzieToken.Encode(s.Url, s.Format, ThreeLetter(s.Language)),
             ProviderName = "Wyzie",
-            Name = display,
+            Name = ResolveDisplayName(s),
             Format = s.Format,
             Author = s.Source,
-            Comment = s.Release,
+            Comment = s.Origin,
             ThreeLetterISOLanguageName = ThreeLetter(s.Language),
+            DownloadCount = s.DownloadCount > int.MaxValue ? int.MaxValue : (int?)s.DownloadCount,
+            HearingImpaired = s.IsHearingImpaired,
         };
+    }
+
+    private static string ResolveDisplayName(WyzieSubtitle s)
+    {
+        if (!string.IsNullOrWhiteSpace(s.Release)) return s.Release!;
+        if (!string.IsNullOrWhiteSpace(s.FileName)) return s.FileName!;
+        if (!string.IsNullOrWhiteSpace(s.Display)) return s.Display;
+        return s.Url;
     }
 
     private string? ResolveMediaId(SubtitleSearchRequest r)

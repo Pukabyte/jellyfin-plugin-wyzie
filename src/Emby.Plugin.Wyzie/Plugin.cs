@@ -10,7 +10,7 @@ using MediaBrowser.Model.Serialization;
 
 namespace Emby.Plugin.Wyzie;
 
-public class Plugin : BasePlugin<PluginConfiguration>, IHasThumbImage
+public class Plugin : BasePlugin<PluginConfiguration>, IHasThumbImage, IHasWebPages
 {
     public static readonly Guid PluginGuid = Guid.Parse("c3d9f7a0-2d4e-4b8f-9a1c-7e3d4c5a6b71");
 
@@ -25,9 +25,24 @@ public class Plugin : BasePlugin<PluginConfiguration>, IHasThumbImage
     public override string Name => "Wyzie Subtitles";
 
     public override string Description =>
-        "On-demand subtitle provider backed by sub.wyzie.ru. Streams subs without caching on disk.";
+        "On-demand subtitle provider backed by sub.wyzie.io. Streams subs without caching on disk.";
 
     public override Guid Id => PluginGuid;
+
+    public IEnumerable<PluginPageInfo> GetPages() => new[]
+    {
+        new PluginPageInfo
+        {
+            Name = "WyzieConfigPage",
+            EmbeddedResourcePath = GetType().Namespace + ".Configuration.configPage.html",
+            IsMainConfigPage = true,
+        },
+        new PluginPageInfo
+        {
+            Name = "WyzieConfigPageJs",
+            EmbeddedResourcePath = GetType().Namespace + ".Configuration.configPage.js",
+        },
+    };
 
     public Stream GetThumbImage()
     {

@@ -89,17 +89,22 @@ public class WyzieSubtitleProvider : ISubtitleProvider
     {
         Id = WyzieToken.Encode(s.Url, s.Format, ThreeLetter(s.Language)),
         ProviderName = "Wyzie",
-        Name = FormatName(s),
+        Name = ResolveDisplayName(s),
         Format = s.Format,
         Author = s.Source,
-        Comment = s.Release,
+        Comment = s.Origin,
         Language = ThreeLetter(s.Language),
+        DownloadCount = s.DownloadCount > int.MaxValue ? int.MaxValue : (int?)s.DownloadCount,
+        IsHearingImpaired = s.IsHearingImpaired,
     };
 
-    private static string FormatName(WyzieSubtitle s)
+    private static string ResolveDisplayName(WyzieSubtitle s)
     {
-        var display = string.IsNullOrWhiteSpace(s.Display) ? (s.FileName ?? s.Url) : s.Display;
-        return s.IsHearingImpaired ? display + " (SDH)" : display;
+        // Prefer release/filename so each row in the picker is distinguishable.
+        if (!string.IsNullOrWhiteSpace(s.Release)) return s.Release!;
+        if (!string.IsNullOrWhiteSpace(s.FileName)) return s.FileName!;
+        if (!string.IsNullOrWhiteSpace(s.Display)) return s.Display;
+        return s.Url;
     }
 
     private string? ResolveMediaId(SubtitleSearchRequest r)

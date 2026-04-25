@@ -39,4 +39,13 @@ public sealed class WyzieSubtitle
 
     [JsonPropertyName("fileName")]
     public string? FileName { get; set; }
+
+    [JsonPropertyName("media")]
+    public string? Media { get; set; }
+
+    [JsonPropertyName("origin")]
+    public string? Origin { get; set; }
+
+    [JsonPropertyName("downloadCount")]
+    public long DownloadCount { get; set; }
 }
