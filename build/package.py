@@ -115,10 +115,8 @@ def build_jellyfin_zip(
 def build_emby_zip(plugin_version: str, publish_dir: pathlib.Path) -> pathlib.Path:
     zip_path = ARTIFACTS / f"emby-plugin-wyzie_{plugin_version}.zip"
     dll = publish_dir / "Emby.Plugin.Wyzie.dll"
-    common = publish_dir / "Wyzie.Common.dll"
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
         z.write(dll, dll.name)
-        z.write(common, common.name)
     return zip_path
 
 

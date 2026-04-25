@@ -11,10 +11,11 @@
 
   <ItemGroup>
     <PackageReference Include="mediabrowser.server.core" Version="4.8.*-*" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Wyzie.Common\Wyzie.Common.csproj" />
+    <Compile Include="..\Wyzie.Common\**\*.cs" Exclude="..\Wyzie.Common\bin\**\*.cs;..\Wyzie.Common\obj\**\*.cs" LinkBase="Wyzie.Common" />
   </ItemGroup>
 
   <ItemGroup>

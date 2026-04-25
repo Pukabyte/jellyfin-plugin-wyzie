@@ -102,13 +102,18 @@ public class WyzieSubtitleProvider : ISubtitleProvider
         return s.IsHearingImpaired ? display + " (SDH)" : display;
     }
 
-    private static string? ResolveMediaId(SubtitleSearchRequest r)
+    private string? ResolveMediaId(SubtitleSearchRequest r)
     {
         if (r.ProviderIds == null) return null;
-        if (r.ProviderIds.TryGetValue("Tmdb", out var tmdb) && !string.IsNullOrWhiteSpace(tmdb))
-            return tmdb;
+        // Wyzie auto-detects format: tt-prefixed = IMDB, numeric = TMDB.
+        // Prefer IMDB because it's universal across providers.
         if (r.ProviderIds.TryGetValue("Imdb", out var imdb) && !string.IsNullOrWhiteSpace(imdb))
             return imdb;
+        if (r.ProviderIds.TryGetValue("Tmdb", out var tmdb) && !string.IsNullOrWhiteSpace(tmdb))
+            return tmdb;
+        // Wyzie's API does not accept TVDB IDs; warn so users know why TVDB-only items return nothing.
+        if (r.ProviderIds.TryGetValue("Tvdb", out var tvdb) && !string.IsNullOrWhiteSpace(tvdb))
+            _logger.Debug("Wyzie: only Tvdb id={0} available for {1}; Wyzie requires IMDB or TMDB", tvdb, r.Name ?? "(unknown)");
         return null;
     }
 
